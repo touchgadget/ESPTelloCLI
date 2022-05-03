@@ -8,12 +8,20 @@ swarm = TelloSwarm.fromSerialSSID([
     ["/dev/cu.usbserial-10", "TELLO-yyyyyy"]
 ])
 
+def rotater(i, tello):
+    if i == 0:
+        return tello.rotate_counter_clockwise(180)
+    return tello.rotate_clockwise(180)
+
 swarm.connect()
 swarm.get_battery()
 swarm.takeoff()
 swarm.rotate_clockwise(90)
 time.sleep(1)
-swarm.rotate_counter_clockwise(180)
+## All drones rotate the same direction
+#swarm.rotate_counter_clockwise(180)
+## First drone rotates counter clockwise, others rotate clockwise.
+swarm.parallel(rotater)
 time.sleep(1)
 swarm.rotate_clockwise(90)
 time.sleep(1)
